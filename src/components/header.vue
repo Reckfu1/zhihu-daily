@@ -1,42 +1,38 @@
 <template>
     <div id="header">
-        <mu-appbar title="Title" class="title">
+        <mu-appbar title="今日热闻" :zDepth="depth" class="title">
             <mu-icon-button icon='menu' slot="left" class="menu-btn" />
         </mu-appbar>
-        <div id="swiper">
-            <swiper :options="swiperOption">
-                <swiper-slide>Slide 1</swiper-slide>
-                <swiper-slide>Slide 2</swiper-slide>
-                <swiper-slide>Slide 3</swiper-slide>
-                <swiper-slide>Slide 4</swiper-slide>
-                <swiper-slide>Slide 5</swiper-slide>
-                <swiper-slide>Slide 6</swiper-slide>
-                <swiper-slide>Slide 7</swiper-slide>
-                <swiper-slide>Slide 8</swiper-slide>
-                <swiper-slide>Slide 9</swiper-slide>
-                <swiper-slide>Slide 10</swiper-slide>
+        <div id="swiper-box">
+            <swiper :options="swiperOption" id="swiper">
+                <swiper-slide id="swiper-item-1"></swiper-slide>
+                <swiper-slide id="swiper-item-2"></swiper-slide>
+                <swiper-slide id="swiper-item-3"></swiper-slide>
+                <swiper-slide id="swiper-item-4"></swiper-slide>
+                <swiper-slide id="swiper-item-5"></swiper-slide>
                 <div class="swiper-pagination" slot="pagination"></div>
             </swiper>
         </div>
     </div>
 </template>
 
-
-
-
-
-
 <script>
 
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
+
     data(){
         return{
             swiperOption:{
                 pagination: '.swiper-pagination',
-                paginationClickable: true
-            }
+                paginationClickable: true,
+                autoplay:2750,
+                autoplayDisableOnInteraction:false,
+                effect:'fade',
+                loop:false
+            },
+            depth:0
         }
     },
     components:{
@@ -49,21 +45,54 @@ export default {
 
 
 <style lang="css" scoped>
-#header{
-
-}
 .title{
+    background-color:transparent;
     text-align: center;
-    background-color: transparent;
     height: 38px;
-    color:#000;
+    color:#fff;
+    position: absolute;
+    font-size: 18px;
+}
+.title .mu-appbar-title{
+    font-size: 18px;
 }
 .menu-btn{
     position: absolute;
     top: -4.5px;
+    left:-2px;
 }
 #swiper{
-    height: 100px;
-    background-color: gray;
+    height: 175px;
+}
+#swiper-item-1{
+    background: url('../assets/test1.jpg') no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+#swiper-item-2{
+    background: url('../assets/test2.jpg') no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+#swiper-item-3{
+    background: url('../assets/test3.jpg') no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+#swiper-item-4{
+    background: url('../assets/test4.jpg') no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+#swiper-item-5{
+    background: url('../assets/test5.jpg') no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.swiper-pagination{
+    bottom:-1px !important;
+}
+#swiper-box{
+    
 }
 </style>
