@@ -21,6 +21,19 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+
+var server = app.listen(9099, function () {
+  console.log('img server is running on: ' + server.address().port);
+})
+// var apiRouter=express.Router();
+// apiRouter.get('/test',function(req,res){
+//   res.json({
+//     errno:"ok"
+//   });
+// });
+// app.use('/api',apiRouter);
+
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
