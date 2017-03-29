@@ -55,7 +55,6 @@ export default {
         this.$http.get('/api/4/news/latest')
             .then((res) => {
                 _this.swiper_mes=res.data
-                console.log(_this.swiper_mes.top_stories[0].title)
             })
             .catch((res) => {
                 console.log('fail to load resource')
