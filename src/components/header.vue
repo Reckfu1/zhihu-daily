@@ -1,6 +1,6 @@
 <template>
     <div id="header">
-        <mu-appbar title="今日热闻" :zDepth="depth" titleClass="change" class="title">
+        <mu-appbar title="今日热闻" :zDepth="depth" class="title">
             <mu-icon-button icon='menu' slot="left" class="menu-btn" />
         </mu-appbar>
         <div id="swiper-box">
