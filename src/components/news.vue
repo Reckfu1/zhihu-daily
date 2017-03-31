@@ -30,7 +30,6 @@ export default {
                 for(let i=0;i<_this.news.length;i++){
                     _this.imgsrc[i]=_this.news[i].images;
                 }
-                console.log(_this.imgsrc)
             })
             .catch((res) => {
                 if(res instanceof Error){
