@@ -1,6 +1,6 @@
 <template>
     <div id="header">
-        <mu-appbar title="今日热闻" :zDepth="depth" class="title">
+        <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change">
             <mu-icon-button icon='menu' slot="left" class="menu-btn" />
         </mu-appbar>
         <div id="swiper-box">
@@ -57,7 +57,9 @@ export default {
                 _this.swiper_mes=res.data
             })
             .catch((res) => {
-                console.log('fail to load resource')
+                if(res instanceof Error){
+                    console.log('Error',res.message)
+                }
             })
     }
 }
@@ -65,17 +67,23 @@ export default {
 </script>
 
 
-<style lang="css" scoped>
+<style lang="css">
 .title{
-    background-color:transparent;
-    text-align: center;
-    height: 38px;
-    color:#fff;
+    background-color:transparent !important;
+    text-align: center !important;
+    height: 38px !important;
+    color:#fff !important;
+    position: absolute !important;
+}
+.change{
     position: absolute;
+    font-size: 18px !important;
+    height: 38px;
+    line-height: 38px !important;
+    right:35.5%;
 }
 .menu-btn{
     position: absolute;
-    top: -4.5px;
     left:-2px;
 }
 #swiper{
@@ -88,7 +96,7 @@ export default {
     bottom:-1px !important;
 }
 .swiper-pagination-bullet-active{
-    background:red;
+    /*background:red;*/
 }
 .swiper-title{
     display: block;

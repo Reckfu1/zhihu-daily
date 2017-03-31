@@ -15,7 +15,7 @@ export default{
 </script>
 
 
-<style lang="css" scoped>
+<style lang="css">
 #content{
     height: 90px;
     width: 100%;
