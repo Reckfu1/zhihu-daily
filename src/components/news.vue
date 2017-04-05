@@ -54,10 +54,10 @@ export default {
             })
         if(str>='2013520'){
             if(month<10){
-                month='0'+month;
+                month='0'+month
             }
             if(day<10){
-                day='0'+day;
+                day='0'+day
             }
         }
     },
