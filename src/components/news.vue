@@ -6,13 +6,15 @@
         </div>
         <div id="old-news">
             <div id="yesterday-news">{{getYesterday}}</div>
-<!--             <div id="yesterday-news-items" v-for="(item,index) in yesterday_news">
-                <div class="content-text"></div>
-                <div class="content-img"><img :src="" alt=""></div>
-            </div> -->
+            <div id="yesterday-news-items" v-for="(item,index) in yesterday_news">
+                <div class="content-text">{{item.title}}</div>
+                <div class="content-img"><img :src="'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl='+item.images[0]" alt=""></div>
+            </div>
         </div>
     </div>
 </template>
+
+
 
 
 
@@ -60,6 +62,17 @@ export default {
                 day='0'+day
             }
         }
+        str=year+month+day
+        this.$http.get('/api/4/news/before/'+str)
+            .then((res) => {
+                _this.yesterday_news=res.data.stories
+                console.log(_this.yesterday_news[0].images[0])
+            })
+            .catch((res) => {
+                if(res instanceof Error){
+                    console.log('Error',res.message)
+                }
+            })
     },
     computed:{
         getYesterday(){
@@ -102,7 +115,7 @@ export default {
 
 
 <style lang="css">
-#news-items{
+#news-items,#yesterday-news-items{
     height: 90px;
     width: 100%;
     /*background-color:gray;*/
@@ -138,5 +151,13 @@ export default {
     text-align: center;
     line-height: 30px;
     letter-spacing: 2px;
+}
+.yesterday-news-box{
+/*    height: 90px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);*/
 }
 </style>
