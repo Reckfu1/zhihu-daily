@@ -5,19 +5,19 @@
         </mu-appbar>
         <div id="swiper-box">
             <swiper :options="swiperOption" v-if="swiper_mes.top_stories" id="swiper">
-                <swiper-slide id="swiper-item-1"><img :src="'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl='+swiper_mes.top_stories[0].image" alt="">
+                <swiper-slide id="swiper-item-1"><img :src="swiper_mes.top_stories[0].image" alt="">
                     <span class="swiper-title">{{swiper_mes.top_stories[0].title}}</span>
                 </swiper-slide>
-                <swiper-slide id="swiper-item-2"><img :src="'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl='+swiper_mes.top_stories[1].image" alt="">
+                <swiper-slide id="swiper-item-2"><img :src="swiper_mes.top_stories[1].image" alt="">
                     <span class="swiper-title">{{swiper_mes.top_stories[1].title}}</span>
                 </swiper-slide>
-                <swiper-slide id="swiper-item-3"><img :src="'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl='+swiper_mes.top_stories[2].image" alt="">
+                <swiper-slide id="swiper-item-3"><img :src="swiper_mes.top_stories[2].image" alt="">
                     <span class="swiper-title">{{swiper_mes.top_stories[2].title}}</span>
                 </swiper-slide>
-                <swiper-slide id="swiper-item-4"><img :src="'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl='+swiper_mes.top_stories[3].image" alt="">
+                <swiper-slide id="swiper-item-4"><img :src="swiper_mes.top_stories[3].image" alt="">
                     <span class="swiper-title">{{swiper_mes.top_stories[3].title}}</span>
                 </swiper-slide>
-                <swiper-slide id="swiper-item-5"><img :src="'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl='+swiper_mes.top_stories[4].image" alt="">
+                <swiper-slide id="swiper-item-5"><img :src="swiper_mes.top_stories[4].image" alt="">
                     <span class="swiper-title">{{swiper_mes.top_stories[4].title}}</span>
                 </swiper-slide>
                 <div class="swiper-pagination swiper-pagination-white" slot="pagination"></div>

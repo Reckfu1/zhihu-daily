@@ -2,14 +2,17 @@
     <div id="news">
         <div id="news-items" v-for="(item,index) in news">
             <div class="content-text">{{item.title}}</div>
-            <div class="content-img"><img :src="'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl='+imgsrc[index]" alt=""></div>
+            <div class="content-img"><img :src="item.images[0]" alt=""></div>
         </div>
         <div id="old-news">
             <div id="yesterday-news">{{getYesterday}}</div>
             <div id="yesterday-news-items" v-for="(item,index) in yesterday_news">
                 <div class="content-text">{{item.title}}</div>
-                <div class="content-img"><img :src="'http://read.html5.qq.com/image?src=forum&q=5&r=0&imgflag=7&imageUrl='+item.images[0]" alt=""></div>
+                <div class="content-img"><img :src="item.images[0]" alt=""></div>
             </div>
+        </div>
+        <div class="before">
+            <div class="load-btn" @click="loadMore">更多</div>
         </div>
     </div>
 </template>
@@ -28,8 +31,8 @@ export default {
     data(){
         return {
             news:[],
-            imgsrc:[],
-            yesterday_news:[]
+            yesterday_news:[],
+            before_news:[]
         }
     },
 
@@ -45,9 +48,6 @@ export default {
         this.$http.get('/api/4/news/latest')
             .then((res) => {
                 _this.news=res.data.stories
-                for(let i=0;i<_this.news.length;i++){
-                    _this.imgsrc[i]=_this.news[i].images
-                }
             })
             .catch((res) => {
                 if(res instanceof Error){
@@ -66,7 +66,6 @@ export default {
         this.$http.get('/api/4/news/before/'+str)
             .then((res) => {
                 _this.yesterday_news=res.data.stories
-                console.log(_this.yesterday_news[0].images[0])
             })
             .catch((res) => {
                 if(res instanceof Error){
@@ -107,6 +106,11 @@ export default {
             }
             return month+'月'+day+'日'+' '+'星期'+str
         }
+    },
+    methods:{
+        loadMore(){
+            console.log('ok!')
+        }
     }
 }
 
@@ -131,6 +135,7 @@ export default {
     font-weight: bolder;
     font-size: 14px;
     margin-top:-4px;
+    margin-right:10px;
 }
 .content-img{
     height: 65px;
@@ -152,12 +157,15 @@ export default {
     line-height: 30px;
     letter-spacing: 2px;
 }
-.yesterday-news-box{
-/*    height: 90px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid rgba(0,0,0,0.1);*/
+/*before*/
+.load-btn{
+    width:100%;
+    height: 30px;
+    background-color: #323232;
+    font-size: 14px;
+    color:#fff;
+    text-align: center;
+    line-height: 30px;
+    letter-spacing: 2px;
 }
 </style>
