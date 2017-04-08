@@ -12,10 +12,17 @@
             </div>
         </div>
         <div class="before">
+            <div class="before-btn" @click="firstLoad">更早之前</div>
+<!--             <div id="before-news">
+                <div class="content-text">{{item.title}}</div>
+                <div class="content-img"><img :src="item.images[0]" alt=""></div>
+            </div> -->
             <div class="load-btn" @click="loadMore">更多</div>
+            <mu-raised-button label="更多" class="demo-raised-button" backgroundColor="#323232" fullWidth="true" />
         </div>
     </div>
 </template>
+
 
 
 
@@ -108,8 +115,11 @@ export default {
         }
     },
     methods:{
+        firstLoad(){
+            console.log('frist load')
+        },
         loadMore(){
-            console.log('ok!')
+            console.log('second time')
         }
     }
 }
@@ -146,19 +156,8 @@ export default {
     height: 100%;
     width: 100%;
 }
-/*old news*/
-#yesterday-news{
-    width:100%;
-    height: 30px;
-    background-color: #323232;
-    font-size: 14px;
-    color:#fff;
-    text-align: center;
-    line-height: 30px;
-    letter-spacing: 2px;
-}
-/*before*/
-.load-btn{
+/*btn*/
+#yesterday-news,.load-btn,.before-btn{
     width:100%;
     height: 30px;
     background-color: #323232;
