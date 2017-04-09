@@ -37,7 +37,8 @@ export default {
             return {
                 news: [],
                 yesterday_news: [],
-                before_news: []
+                before_news: [],
+                click_time:0
             }
         },
 
@@ -45,12 +46,12 @@ export default {
             let _this = this
             let date = new Date()
             let year, month, day, str, str_2
-            let temp_month,temp_day
+            let temp_month, temp_day
             year = date.getFullYear()
             month = date.getMonth() + 1
             day = date.getDate()
-            temp_month=month
-            temp_day=day
+            temp_month = month
+            temp_day = day
             str = '' + year + month + day
             if (str >= '2013520') {
                 if (month < 10) {
@@ -61,7 +62,7 @@ export default {
                 }
             }
             str = year + month + day
-            // 获取最新消息，即当天日期
+                // 获取最新消息，即当天日期
             this.$http.get('/api/4/news/latest')
                 .then((res) => {
                     _this.news = res.data.stories
@@ -82,32 +83,29 @@ export default {
                         console.log('Error', res.message)
                     }
                 })
-            // test
-            if(temp_day==1){
-                temp_month-=1
-                let flag=true
-                if(temp_month==2){
-                    temp_day=year % 4 == 0 ? 29 : 28
+                // test
+            if (temp_day == 1) {
+                temp_month -= 1
+                let flag = true
+                if (temp_month == 2) {
+                    temp_day = year % 4 == 0 ? 29 : 28
+                } else if (temp_month == 1 || temp_month == 3 || temp_month == 5 || temp_month == 7 || temp_month == 8 || temp_month == 10 || temp_month == 12) {
+                    temp_day = 31
+                } else {
+                    temp_day = 30
                 }
-                else if(temp_month == 1 || temp_month == 3 || temp_month == 5 || temp_month == 7 || temp_month == 8 || temp_month == 10 || temp_month == 12){
-                    temp_day=31
-                }
-                else{
-                    temp_day=30
-                }
-                while(flag){
-                    if(temp_month<10){
-                        temp_month='0'+temp_month
+                while (flag) {
+                    if (temp_month < 10) {
+                        temp_month = '0' + temp_month
                     }
-                    if(temp_day<10){
-                        temp_day='0'+temp_day
+                    if (temp_day < 10) {
+                        temp_day = '0' + temp_day
                     }
-                    str_2=''+year+temp_month+temp_day
-                    flag=false
+                    str_2 = '' + year + temp_month + temp_day
+                    flag = false
                 }
-            }
-            else{
-                str_2=str-1
+            } else {
+                str_2 = str - 1
             }
             this.$http.get('/api/4/news/before/' + str_2)
                 .then((res) => {
@@ -122,13 +120,13 @@ export default {
         computed: {
             getYesterday() {
                 let date = new Date()
-                let year,month, day, what_day, str
+                let year, month, day, what_day, str
                 year = date.getFullYear()
                 month = date.getMonth() + 1
                 day = date.getDate() - 1
                 what_day = date.getDay()
                 if (day == 0) {
-                    month-=1
+                    month -= 1
                     if (month == 2) {
                         day = year % 4 == 0 ? 29 : 28
                     } else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
@@ -165,16 +163,36 @@ export default {
         },
         methods: {
             loadMore() {
-                console.log('second time')
+                let load_date=new Date()
+                let year,month,day,str
+                let _this=this
+                year=load_date.getFullYear()
+                month = load_date.getMonth() + 1
+                day = load_date.getDate()
+                if(month<10){
+                    month='0'+month
+                }
+                if(day<10){
+                    day='0'+day
+                }
+                str=''+year+month+day-this.click_time
+                this.click_time++
+                this.$http.get('/api/4/news/before/' + str)
+                    .then((res) => {
+                        for(let i=0;i<res.data.stories.length;i++){
+                            _this.before_news.push(res.data.stories[i])
+                        }
+                    })
+                    .catch((res) => {
+                        if(res instanceof Error){
+                            console.log('Error',res.message)
+                        }
+                    })
             }
         }
 
 }
 </script>
-
-
-
-
 
 
 <style lang="css">
