@@ -12,13 +12,12 @@
             </div>
         </div>
         <div class="before">
-            <div class="before-btn" @click="firstLoad">更早之前</div>
-<!--             <div id="before-news">
+            <div class="before-tag">更早之前</div>
+            <div id="before-news" v-for="(item,index) in before_news">
                 <div class="content-text">{{item.title}}</div>
                 <div class="content-img"><img :src="item.images[0]" alt=""></div>
-            </div> -->
-            <div class="load-btn" @click="loadMore">更多</div>
-            <mu-raised-button label="更多" class="demo-raised-button" backgroundColor="#323232" fullWidth="true" />
+            </div>
+            <mu-raised-button @click="loadMore" label="点击更多" class="demo-raised-button" backgroundColor="#000" fullWidth/>
         </div>
     </div>
 </template>
@@ -32,104 +31,154 @@
 
 
 <script>
-
 export default {
 
-    data(){
-        return {
-            news:[],
-            yesterday_news:[],
-            before_news:[]
-        }
-    },
-
-    created(){
-        let _this=this
-        let date=new Date()
-        let year,month,day
-        let str=''
-        year=date.getFullYear()
-        month=date.getMonth()+1
-        day=date.getDate()
-        str=''+year+month+day
-        this.$http.get('/api/4/news/latest')
-            .then((res) => {
-                _this.news=res.data.stories
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
-        if(str>='2013520'){
-            if(month<10){
-                month='0'+month
+    data() {
+            return {
+                news: [],
+                yesterday_news: [],
+                before_news: []
             }
-            if(day<10){
-                day='0'+day
-            }
-        }
-        str=year+month+day
-        this.$http.get('/api/4/news/before/'+str)
-            .then((res) => {
-                _this.yesterday_news=res.data.stories
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
-    },
-    computed:{
-        getYesterday(){
-            let date= new Date()
-            let month,day,what_day
-            let str=''
-            month=date.getMonth()+1
-            day=date.getDate()-1
-            what_day=date.getDay()
-            switch(what_day){
-                case 0:
-                    str='六'
-                    break
-                case 1:
-                    str='日'
-                    break
-                case 2:
-                    str='一'
-                    break
-                case 3:
-                    str='二'
-                    break
-                case 4:
-                    str='三'
-                    break
-                case 5:
-                    str='四'
-                    break
-                case 6:
-                    str='五'
-                    break
-            }
-            return month+'月'+day+'日'+' '+'星期'+str
-        }
-    },
-    methods:{
-        firstLoad(){
-            console.log('frist load')
         },
-        loadMore(){
-            console.log('second time')
-        }
-    }
-}
 
+        created() {
+            let _this = this
+            let date = new Date()
+            let year, month, day, str, str_2
+            let temp_month,temp_day
+            year = date.getFullYear()
+            month = date.getMonth() + 1
+            day = date.getDate()
+            temp_month=month
+            temp_day=day
+            str = '' + year + month + day
+            if (str >= '2013520') {
+                if (month < 10) {
+                    month = '0' + month
+                }
+                if (day < 10) {
+                    day = '0' + day
+                }
+            }
+            str = year + month + day
+            // 获取最新消息，即当天日期
+            this.$http.get('/api/4/news/latest')
+                .then((res) => {
+                    _this.news = res.data.stories
+                })
+                .catch((res) => {
+                    if (res instanceof Error) {
+                        console.log('Error', res.message)
+                    }
+                })
+
+            // 获取昨天的消息
+            this.$http.get('/api/4/news/before/' + str)
+                .then((res) => {
+                    _this.yesterday_news = res.data.stories
+                })
+                .catch((res) => {
+                    if (res instanceof Error) {
+                        console.log('Error', res.message)
+                    }
+                })
+            // test
+            if(temp_day==1){
+                temp_month-=1
+                let flag=true
+                if(temp_month==2){
+                    temp_day=year % 4 == 0 ? 29 : 28
+                }
+                else if(temp_month == 1 || temp_month == 3 || temp_month == 5 || temp_month == 7 || temp_month == 8 || temp_month == 10 || temp_month == 12){
+                    temp_day=31
+                }
+                else{
+                    temp_day=30
+                }
+                while(flag){
+                    if(temp_month<10){
+                        temp_month='0'+temp_month
+                    }
+                    if(temp_day<10){
+                        temp_day='0'+temp_day
+                    }
+                    str_2=''+year+temp_month+temp_day
+                    flag=false
+                }
+            }
+            else{
+                str_2=str-1
+            }
+            this.$http.get('/api/4/news/before/' + str_2)
+                .then((res) => {
+                    _this.before_news = res.data.stories
+                })
+                .catch((res) => {
+                    if (res instanceof Error) {
+                        console.log('Error', res.message)
+                    }
+                })
+        },
+        computed: {
+            getYesterday() {
+                let date = new Date()
+                let year,month, day, what_day, str
+                year = date.getFullYear()
+                month = date.getMonth() + 1
+                day = date.getDate() - 1
+                what_day = date.getDay()
+                if (day == 0) {
+                    month-=1
+                    if (month == 2) {
+                        day = year % 4 == 0 ? 29 : 28
+                    } else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                        day = 31
+                    } else {
+                        day = 30
+                    }
+                }
+                switch (what_day) {
+                    case 0:
+                        str = '六'
+                        break
+                    case 1:
+                        str = '日'
+                        break
+                    case 2:
+                        str = '一'
+                        break
+                    case 3:
+                        str = '二'
+                        break
+                    case 4:
+                        str = '三'
+                        break
+                    case 5:
+                        str = '四'
+                        break
+                    case 6:
+                        str = '五'
+                        break
+                }
+                return month + '月' + day + '日' + ' ' + '星期' + str
+            }
+        },
+        methods: {
+            loadMore() {
+                console.log('second time')
+            }
+        }
+
+}
 </script>
 
 
 
+
+
+
 <style lang="css">
-#news-items,#yesterday-news-items{
+#news-items,#yesterday-news-items,#before-news{
     height: 90px;
     width: 100%;
     /*background-color:gray;*/
@@ -157,14 +206,18 @@ export default {
     width: 100%;
 }
 /*btn*/
-#yesterday-news,.load-btn,.before-btn{
+#yesterday-news,.before-tag{
     width:100%;
-    height: 30px;
-    background-color: #323232;
+    height: 35px;
+    background-color: #000;
     font-size: 14px;
     color:#fff;
     text-align: center;
-    line-height: 30px;
+    line-height: 35px;
+    letter-spacing: 2px;
+}
+.demo-raised-button{
+    border-radius: 0 !important;
     letter-spacing: 2px;
 }
 </style>
