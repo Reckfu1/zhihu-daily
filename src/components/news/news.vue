@@ -31,6 +31,7 @@
 
 
 <script>
+import {getMaxDays} from './func.js'
 export default {
 
     data() {
@@ -38,7 +39,7 @@ export default {
                 news: [],
                 yesterday_news: [],
                 before_news: [],
-                click_time:0
+                load_str:''
             }
         },
 
@@ -62,6 +63,7 @@ export default {
                 }
             }
             str = year + month + day
+            this.load_str=str
                 // 获取最新消息，即当天日期
             this.$http.get('/api/4/news/latest')
                 .then((res) => {
@@ -163,31 +165,29 @@ export default {
         },
         methods: {
             loadMore() {
-                let load_date=new Date()
-                let year,month,day,str
                 let _this=this
-                year=load_date.getFullYear()
-                month = load_date.getMonth() + 1
-                day = load_date.getDate()
-                if(month<10){
-                    month='0'+month
+                let load_date=new Date()
+                let load_year,load_month,maxdays
+                load_year=load_date.getFullYear()
+                load_date=load_date.getMonth()+1
+                this.load_str-=1
+                if(this.load_str[this.load_str.length-1]==0){
+                    load_month-=1
+                    maxdays=getMaxDays(load_year,load_month)
+                    this.load_str=load_year+load_month+maxdays+''
                 }
-                if(day<10){
-                    day='0'+day
-                }
-                str=''+year+month+day-this.click_time
-                this.click_time++
-                this.$http.get('/api/4/news/before/' + str)
-                    .then((res) => {
-                        for(let i=0;i<res.data.stories.length;i++){
-                            _this.before_news.push(res.data.stories[i])
-                        }
-                    })
-                    .catch((res) => {
-                        if(res instanceof Error){
-                            console.log('Error',res.message)
-                        }
-                    })
+                // this.$http.get('/api/4/news/before/' + str)
+                //     .then((res) => {
+                //         for(let i=0;i<res.data.stories.length;i++){
+                //             _this.before_news.push(res.data.stories[i])
+                //         }
+                //     })
+                //     .catch((res) => {
+                //         if(res instanceof Error){
+                //             console.log('Error',res.message)
+                //         }
+                //     })
+                console.log(this.load_str)
             }
         }
 
