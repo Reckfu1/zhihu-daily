@@ -171,11 +171,13 @@ export default {
                 load_year=load_date.getFullYear()
                 load_date=load_date.getMonth()+1
                 this.load_str-=1
-                if(this.load_str[this.load_str.length-1]==0){
-                    load_month-=1
-                    maxdays=getMaxDays(load_year,load_month)
-                    this.load_str=load_year+load_month+maxdays+''
-                }
+                console.log()
+                // if(this.load_str[this.load_str.length-1]==0){
+                //     console.log('in')
+                //     load_month-=1
+                //     maxdays=getMaxDays(load_year,load_month)
+                //     this.load_str=load_year+load_month+maxdays+''
+                // }
                 // this.$http.get('/api/4/news/before/' + str)
                 //     .then((res) => {
                 //         for(let i=0;i<res.data.stories.length;i++){

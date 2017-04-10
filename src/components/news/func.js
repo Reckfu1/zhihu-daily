@@ -1,4 +1,4 @@
-let getMaxDays = function(year, month) {
+export const getMaxDays=function(year, month) {
     let days
     if (month == 2) {
         days = year % 4 == 0 ? 29 : 28
@@ -9,5 +9,3 @@ let getMaxDays = function(year, month) {
     }
     return days
 }
-
-export default getMaxDays
