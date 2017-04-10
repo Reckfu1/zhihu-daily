@@ -169,15 +169,25 @@ export default {
                 let load_date=new Date()
                 let load_year,load_month,maxdays
                 load_year=load_date.getFullYear()
-                load_date=load_date.getMonth()+1
+                load_month=load_date.getMonth()+1
                 this.load_str-=1
-                console.log()
-                // if(this.load_str[this.load_str.length-1]==0){
-                //     console.log('in')
-                //     load_month-=1
-                //     maxdays=getMaxDays(load_year,load_month)
-                //     this.load_str=load_year+load_month+maxdays+''
-                // }
+                this.load_str+=''
+                // console.log(this.load_str)
+                // 完全搞不懂为啥不减一日了狗了
+                if(this.load_str[6]==0&&this.load_str[7]==0){
+                    let foo
+                    load_month-=1
+                    foo=load_month
+                    console.log(foo,typeof(foo))
+                    maxdays=getMaxDays(load_year,load_month)
+                    if(load_month<10){
+                        load_month='0'+load_month
+                    }
+                    this.load_str=''+load_year+load_month+maxdays
+                    load_month=foo
+                    console.log(load_month,typeof(load_month))
+                }
+                console.log(this.load_str)
                 // this.$http.get('/api/4/news/before/' + str)
                 //     .then((res) => {
                 //         for(let i=0;i<res.data.stories.length;i++){
@@ -189,7 +199,7 @@ export default {
                 //             console.log('Error',res.message)
                 //         }
                 //     })
-                console.log(this.load_str)
+                
             }
         }
 
