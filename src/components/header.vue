@@ -1,5 +1,9 @@
 <template>
     <div id="header">
+<!--         <div class="shade-box">
+            <div class="shade-top"></div>
+            <div class="shade-bottom"></div>
+        </div> -->
         <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change">
             <mu-icon-button icon='menu' slot="left" class="menu-btn" />
         </mu-appbar>
@@ -40,6 +44,7 @@ export default {
                 autoplay:2850,
                 autoplayDisableOnInteraction:false,
                 effect:'fade',
+                touchMoveStopPropagation : false,
                 loop:false
             },
             depth:0,
@@ -73,7 +78,7 @@ export default {
     text-align: center !important;
     height: 38px !important;
     color:#fff !important;
-    position: absolute !important;
+    position: fixed !important;
 }
 .change{
     position: absolute;
@@ -87,7 +92,7 @@ export default {
     left:-2px;
 }
 #swiper{
-    height: 195px;
+    height: 200px;
 }
 #swiper img{
     width: 100%;
@@ -95,13 +100,10 @@ export default {
 .swiper-pagination{
     bottom:-1px !important;
 }
-.swiper-pagination-bullet-active{
-    /*background:red;*/
-}
 .swiper-title{
     display: block;
-    width: 80%;
-    font-size: 14px;
+    width: 75%;
+    font-size: 16px;
     position: absolute;
     top:135px;
     left: 10%;
@@ -109,4 +111,22 @@ export default {
     font-weight: bolder;
     text-align: center;
 }
+/*shade*/
+/*.shade-box{
+    height: 195px;
+    width: 100%;
+    position:absolute;
+    z-index: 9999;
+    top:0;
+}
+.shade-top,.shade-bottom{
+    height: 97.5px;
+    width:100%;
+}
+.shade-top{
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(255,255,255,0));
+}
+.shade-bottom{
+    background: linear-gradient(rgba(255,255,255,0), rgba(0,0,0,0.3));
+}*/
 </style>

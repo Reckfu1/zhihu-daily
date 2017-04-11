@@ -55,19 +55,17 @@ export default {
             temp_month = month
             temp_day = day
             str = '' + year + month + day
-            if (str >= '2013520') {
-                if (month < 10) {
-                    month = '0' + month
-                }
-                if (day < 10) {
-                    day = '0' + day
-                }
+            if (month < 10) {
+                month = '0' + month
+            }
+            if (day < 10) {
+                day = '0' + day
             }
             str = year + month + day
             // 初始化加载所需要用到的变量
             this.load_str=str
             this.load_month=date.getMonth()+1
-                // 获取最新消息，即当天日期
+            // 获取最新消息，即当天日期
             this.$http.get('/api/4/news/latest')
                 .then((res) => {
                     _this.news = res.data.stories
@@ -88,17 +86,13 @@ export default {
                         console.log('Error', res.message)
                     }
                 })
-                // test
+            // 获取前天的消息，先判断前天是否回到了上个月
+            // 如果为true，月份减一并获取上个月最大天数，重新构造url
+            // 如果为false，只需天数减一
             if (temp_day == 1) {
                 temp_month -= 1
                 let flag = true
-                if (temp_month == 2) {
-                    temp_day = year % 4 == 0 ? 29 : 28
-                } else if (temp_month == 1 || temp_month == 3 || temp_month == 5 || temp_month == 7 || temp_month == 8 || temp_month == 10 || temp_month == 12) {
-                    temp_day = 31
-                } else {
-                    temp_day = 30
-                }
+                temp_day=getMaxDays(year,temp_month)
                 while (flag) {
                     if (temp_month < 10) {
                         temp_month = '0' + temp_month
@@ -132,13 +126,7 @@ export default {
                 what_day = date.getDay()
                 if (day == 0) {
                     month -= 1
-                    if (month == 2) {
-                        day = year % 4 == 0 ? 29 : 28
-                    } else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
-                        day = 31
-                    } else {
-                        day = 30
-                    }
+                    day=getMaxDays(year,month)
                 }
                 switch (what_day) {
                     case 0:
@@ -176,7 +164,10 @@ export default {
                 this.load_str-=1
                 this.load_str+=''
 
+                // 判断是否到了当前月份的第一天
                 if(this.load_str[6]==0&&this.load_str[7]==0){
+                    // foo用来保存number类型的load_month，因为当月份少于10时
+                    // load_month+‘0’变为string，当再次倒退月份的时候减一失效
                     let foo
                     this.load_month-=1
                     foo=this.load_month
@@ -187,18 +178,18 @@ export default {
                     this.load_str=''+load_year+this.load_month+maxdays
                     this.load_month=foo
                 }
-                console.log(this.load_str)
-                // this.$http.get('/api/4/news/before/' + str)
-                //     .then((res) => {
-                //         for(let i=0;i<res.data.stories.length;i++){
-                //             _this.before_news.push(res.data.stories[i])
-                //         }
-                //     })
-                //     .catch((res) => {
-                //         if(res instanceof Error){
-                //             console.log('Error',res.message)
-                //         }
-                //     })
+
+                this.$http.get('/api/4/news/before/' + (this.load_str-1+''))
+                    .then((res) => {
+                        for(let i=0;i<res.data.stories.length;i++){
+                            _this.before_news.push(res.data.stories[i])
+                        }
+                    })
+                    .catch((res) => {
+                        if(res instanceof Error){
+                            console.log('Error',res.message)
+                        }
+                    })
                 
             }
         }

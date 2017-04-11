@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-header></v-header>
-    <news></news>  
+    <news></news>
   </div>
 </template>
 
@@ -19,4 +19,5 @@ export default {
 </script>
 
 <style>
+
 </style>
