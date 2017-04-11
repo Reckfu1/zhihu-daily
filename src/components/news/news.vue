@@ -39,7 +39,8 @@ export default {
                 news: [],
                 yesterday_news: [],
                 before_news: [],
-                load_str:''
+                load_str:'',
+                load_month:0
             }
         },
 
@@ -63,7 +64,9 @@ export default {
                 }
             }
             str = year + month + day
+            // 初始化加载所需要用到的变量
             this.load_str=str
+            this.load_month=date.getMonth()+1
                 // 获取最新消息，即当天日期
             this.$http.get('/api/4/news/latest')
                 .then((res) => {
@@ -167,25 +170,22 @@ export default {
             loadMore() {
                 let _this=this
                 let load_date=new Date()
-                let load_year,load_month,maxdays
+                let load_year,maxdays
                 load_year=load_date.getFullYear()
-                load_month=load_date.getMonth()+1
+
                 this.load_str-=1
                 this.load_str+=''
-                // console.log(this.load_str)
-                // 完全搞不懂为啥不减一日了狗了
+
                 if(this.load_str[6]==0&&this.load_str[7]==0){
                     let foo
-                    load_month-=1
-                    foo=load_month
-                    console.log(foo,typeof(foo))
-                    maxdays=getMaxDays(load_year,load_month)
-                    if(load_month<10){
-                        load_month='0'+load_month
+                    this.load_month-=1
+                    foo=this.load_month
+                    maxdays=getMaxDays(load_year,this.load_month)
+                    if(this.load_month<10){
+                        this.load_month='0'+this.load_month
                     }
-                    this.load_str=''+load_year+load_month+maxdays
-                    load_month=foo
-                    console.log(load_month,typeof(load_month))
+                    this.load_str=''+load_year+this.load_month+maxdays
+                    this.load_month=foo
                 }
                 console.log(this.load_str)
                 // this.$http.get('/api/4/news/before/' + str)
