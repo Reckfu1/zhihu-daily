@@ -1,10 +1,8 @@
 <template>
     <div id="header">
-<!--         <div class="shade-box">
-            <div class="shade-top"></div>
-            <div class="shade-bottom"></div>
-        </div> -->
-        <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change">
+        <div class="shade-top"></div>
+        <div class="shade-bottom"></div>
+        <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change" :style="header_obj">
             <mu-icon-button icon='menu' slot="left" class="menu-btn" />
         </mu-appbar>
         <div id="swiper-box">
@@ -48,7 +46,11 @@ export default {
                 loop:false
             },
             depth:0,
-            swiper_mes:{}
+            scroll:0,
+            swiper_mes:{},
+            header_obj:{
+                backgroundColor:'rgba(0,0,0,0)'
+            }
         }
     },
     components:{
@@ -66,6 +68,21 @@ export default {
                     console.log('Error',res.message)
                 }
             })
+    },
+    mounted(){
+        window.addEventListener('scroll',this.watchScroll)
+    },
+    methods:{
+        watchScroll(){
+            let value,header_str
+            this.scroll=document.body.scrollTop
+            value=this.scroll/500
+            if(value>=1){
+                return
+            }
+            console.log(value)
+            this.header_obj.backgroundColor='rgba(0,0,0,'+value+')'
+        }
     }
 }
 
@@ -73,8 +90,10 @@ export default {
 
 
 <style lang="css">
+#header{
+    position: relative;
+}
 .title{
-    background-color:transparent !important;
     text-align: center !important;
     height: 38px !important;
     color:#fff !important;
@@ -116,17 +135,21 @@ export default {
     height: 195px;
     width: 100%;
     position:absolute;
-    z-index: 9999;
+    z-index: 2;
     top:0;
-}
+}*/
 .shade-top,.shade-bottom{
-    height: 97.5px;
+    height: 40px;
     width:100%;
+    position: absolute;
+    z-index: 2;
 }
 .shade-top{
-    background: linear-gradient(rgba(0,0,0,0.3), rgba(255,255,255,0));
+    top:0;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(255,255,255,0));
 }
 .shade-bottom{
-    background: linear-gradient(rgba(255,255,255,0), rgba(0,0,0,0.3));
-}*/
+    bottom: 0;
+    background: linear-gradient(rgba(255,255,255,0), rgba(0,0,0,0.5));
+}
 </style>
