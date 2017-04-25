@@ -1,23 +1,23 @@
 <template>
     <div id="news">
-        <div id="news-items" v-for="(item,index) in news">
+        <div id="news-items" @click="getNewsContent(item.id)" v-for="(item,index) in news">
             <div class="content-text">{{item.title}}</div>
             <div class="content-img"><img :src="item.images[0]" alt=""></div>
         </div>
         <div id="old-news">
-            <div id="yesterday-news">{{getYesterday}}</div>
+            <div id="yesterday-news" v-if="show_2">{{getYesterday}}</div>
             <div id="yesterday-news-items" v-for="(item,index) in yesterday_news">
                 <div class="content-text">{{item.title}}</div>
                 <div class="content-img"><img :src="item.images[0]" alt=""></div>
             </div>
         </div>
         <div class="before">
-            <div class="before-tag">更早之前</div>
+            <div class="before-tag" v-if="show_3">更早之前</div>
             <div id="before-news" v-for="(item,index) in before_news">
                 <div class="content-text">{{item.title}}</div>
                 <div class="content-img"><img :src="item.images[0]" alt=""></div>
             </div>
-            <mu-raised-button @click="loadMore" label="点击更多" class="demo-raised-button" backgroundColor="#000" fullWidth/>
+            <mu-raised-button v-if="btn_show" @click="loadMore" label="点击更多" class="demo-raised-button" backgroundColor="#000" fullWidth/>
         </div>
     </div>
 </template>
@@ -25,13 +25,9 @@
 
 
 
-
-
-
-
-
 <script>
 import {getMaxDays} from './func.js'
+import router from '../../router'
 export default {
 
     data() {
@@ -40,12 +36,14 @@ export default {
                 yesterday_news: [],
                 before_news: [],
                 load_str:'',
-                load_month:0
+                load_month:0,
+                show_2:false,
+                show_3:false,
+                btn_show:false
             }
         },
 
         created() {
-            let _this = this
             let date = new Date()
             let year, month, day, str, str_2
             let temp_month, temp_day
@@ -68,7 +66,7 @@ export default {
             // 获取最新消息，即当天日期
             this.$http.get('/api/4/news/latest')
                 .then((res) => {
-                    _this.news = res.data.stories
+                    this.news = res.data.stories
                 })
                 .catch((res) => {
                     if (res instanceof Error) {
@@ -79,7 +77,7 @@ export default {
             // 获取昨天的消息
             this.$http.get('/api/4/news/before/' + str)
                 .then((res) => {
-                    _this.yesterday_news = res.data.stories
+                    this.yesterday_news = res.data.stories
                 })
                 .catch((res) => {
                     if (res instanceof Error) {
@@ -106,9 +104,13 @@ export default {
             } else {
                 str_2 = str - 1
             }
+            // 获取前天的消息
             this.$http.get('/api/4/news/before/' + str_2)
                 .then((res) => {
-                    _this.before_news = res.data.stories
+                    this.show_2=true
+                    this.show_3=true
+                    this.btn_show=true
+                    this.before_news = res.data.stories
                 })
                 .catch((res) => {
                     if (res instanceof Error) {
@@ -156,7 +158,6 @@ export default {
         },
         methods: {
             loadMore() {
-                let _this=this
                 let load_date=new Date()
                 let load_year,maxdays
                 load_year=load_date.getFullYear()
@@ -182,7 +183,7 @@ export default {
                 this.$http.get('/api/4/news/before/' + (this.load_str-1+''))
                     .then((res) => {
                         for(let i=0;i<res.data.stories.length;i++){
-                            _this.before_news.push(res.data.stories[i])
+                            this.before_news.push(res.data.stories[i])
                         }
                     })
                     .catch((res) => {
@@ -190,7 +191,9 @@ export default {
                             console.log('Error',res.message)
                         }
                     })
-                
+            },
+            getNewsContent(id){
+                router.push({name:'content',params:{id:id} })
             }
         }
 
@@ -240,5 +243,15 @@ export default {
 .demo-raised-button{
     border-radius: 0 !important;
     letter-spacing: 2px;
+}
+/*loading*/
+.n-wait{
+    position: absolute !important;
+    z-index: 9999;
+    top:0;
+    left: 0;
+    right:0;
+    bottom:0;
+    margin:auto;
 }
 </style>
