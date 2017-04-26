@@ -1,7 +1,7 @@
 <template>
 <div id="content">
     <div class="detail" v-html="content_data.body"></div>
-    <mu-circular-progress :size="45" color="black" :strokeWidth="4" v-show="c_waiting" class="n-wait" />
+    <mu-circular-progress :size="45" color="black" :strokeWidth="4" v-show="c_waiting" class="wait" />
 </div>
 </template>
 
@@ -36,6 +36,15 @@ export default{
 </script>
 
 
-<style lang="css">
-@import '../assets/css/news_qa.auto.css'
+<style lang="css" scoped>
+@import '../assets/css/news_qa.auto.css';
+/*loading*/
+.wait{
+    position: absolute !important;
+    top:0;
+    left: 0;
+    right:0;
+    bottom:0;
+    margin:auto;
+}
 </style>

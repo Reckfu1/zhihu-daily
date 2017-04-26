@@ -1,6 +1,6 @@
 <template>
-    <div id="header">
-        <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change" :style="header_obj" v-if="show_1">
+    <div id="header" v-show="h_show">
+        <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change" :style="header_obj">
             <mu-icon-button icon='menu' slot="left" class="menu-btn" />
         </mu-appbar>
         <div id="swiper-box">
@@ -57,7 +57,7 @@ export default {
             header_obj:{
                 backgroundColor:'rgba(0,0,0,0)'
             },
-            show_1:false
+            h_show:false
         }
     },
     computed:{
@@ -74,7 +74,7 @@ export default {
         this.$http.get('/api/4/news/latest')
             .then((res) => {
                 this.swiper_mes=res.data
-                this.show_1=true
+                this.h_show=true
             })
             .catch((res) => {
                 if(res instanceof Error){
@@ -90,6 +90,9 @@ export default {
         watchScroll(){
             let value,header_str
             this.scroll=document.body.scrollTop
+            // 这里保存滚动位置 用于路由跳转
+            sessionStorage.setItem('scrollTop',this.scroll)
+            // 设置透明度
             value=this.scroll/800
             if(value>=1){
                 return
@@ -165,15 +168,5 @@ export default {
 }
 #swiper-box{
     position: relative;
-}
-/*loading*/
-.h-wait{
-    position: absolute !important;
-    z-index: 9999;
-    top:0;
-    left: 0;
-    right:0;
-    bottom:0;
-    margin:auto;
 }
 </style>

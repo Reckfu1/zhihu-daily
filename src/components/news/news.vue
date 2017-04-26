@@ -1,23 +1,23 @@
 <template>
-    <div id="news">
+    <div id="news" v-show="n_show">
         <div id="news-items" @click="getNewsContent(item.id)" v-for="(item,index) in news">
             <div class="content-text">{{item.title}}</div>
             <div class="content-img"><img :src="item.images[0]" alt=""></div>
         </div>
         <div id="old-news">
-            <div id="yesterday-news" v-if="show_2">{{getYesterday}}</div>
-            <div id="yesterday-news-items" v-for="(item,index) in yesterday_news">
+            <div class="yesterday-news">{{getYesterday}}</div>
+            <div id="yesterday-news-items" @click="getNewsContent(item.id)" v-for="(item,index) in yesterday_news">
                 <div class="content-text">{{item.title}}</div>
                 <div class="content-img"><img :src="item.images[0]" alt=""></div>
             </div>
         </div>
         <div class="before">
-            <div class="before-tag" v-if="show_3">更早之前</div>
-            <div id="before-news" v-for="(item,index) in before_news">
+            <div class="before-tag">更早之前</div>
+            <div id="before-news" @click="getNewsContent(item.id)" v-for="(item,index) in before_news">
                 <div class="content-text">{{item.title}}</div>
                 <div class="content-img"><img :src="item.images[0]" alt=""></div>
             </div>
-            <mu-raised-button v-if="btn_show" @click="loadMore" label="点击更多" class="demo-raised-button" backgroundColor="#000" fullWidth/>
+            <mu-raised-button @click="loadMore" label="点击更多" class="demo-raised-button" backgroundColor="#000" fullWidth/>
         </div>
     </div>
 </template>
@@ -37,9 +37,7 @@ export default {
                 before_news: [],
                 load_str:'',
                 load_month:0,
-                show_2:false,
-                show_3:false,
-                btn_show:false
+                n_show:false
             }
         },
 
@@ -107,10 +105,8 @@ export default {
             // 获取前天的消息
             this.$http.get('/api/4/news/before/' + str_2)
                 .then((res) => {
-                    this.show_2=true
-                    this.show_3=true
-                    this.btn_show=true
                     this.before_news = res.data.stories
+                    this.n_show=true
                 })
                 .catch((res) => {
                     if (res instanceof Error) {
@@ -230,7 +226,7 @@ export default {
     width: 100%;
 }
 /*btn*/
-#yesterday-news,.before-tag{
+.yesterday-news,.before-tag{
     width:100%;
     height: 35px;
     background-color: #000;
@@ -243,15 +239,5 @@ export default {
 .demo-raised-button{
     border-radius: 0 !important;
     letter-spacing: 2px;
-}
-/*loading*/
-.n-wait{
-    position: absolute !important;
-    z-index: 9999;
-    top:0;
-    left: 0;
-    right:0;
-    bottom:0;
-    margin:auto;
 }
 </style>

@@ -6,6 +6,7 @@ import index from '../views/index'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       name:'index',
@@ -17,5 +18,21 @@ export default new Router({
       path: '/stories/latest/:id',
       component:content
     }
-  ]
+  ],
+  scrollBehavior(to,from,savedPosition){
+    if(savedPosition){
+      return savedPosition
+    }
+
+    let position={
+      x:0,
+      y:0
+    }
+
+    if(to.path==='/'){
+      position.y=+sessionStorage.getItem('scrollTop')||0
+    }
+
+    return position
+  }
 })
