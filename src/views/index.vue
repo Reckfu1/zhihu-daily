@@ -1,5 +1,5 @@
 <template>
-    <div id="index">
+    <div id="index" class="animated fadeIn">
         <v-header></v-header>
         <news></news>
     </div>
@@ -15,12 +15,12 @@ export default {
     components: {
         'v-header': header,
         news
+    },
+    deactivated(){
+        sessionStorage.setItem('scrollTop',document.body.scrollTop)
     }
 }
 </script>
 
-
-
-<style lang="css" scoped>
-
+<style lang="css">
 </style>

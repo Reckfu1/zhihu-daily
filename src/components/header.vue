@@ -5,20 +5,9 @@
         </mu-appbar>
         <div id="swiper-box">
             <swiper :options="swiperOption" v-if="swiper_mes.top_stories" id="swiper" ref="mySwiper">
-                <swiper-slide id="swiper-item-1"><img :src="swiper_mes.top_stories[0].image" alt="">
-                    <span class="swiper-title">{{swiper_mes.top_stories[0].title}}</span>
-                </swiper-slide>
-                <swiper-slide id="swiper-item-2"><img :src="swiper_mes.top_stories[1].image" alt="">
-                    <span class="swiper-title">{{swiper_mes.top_stories[1].title}}</span>
-                </swiper-slide>
-                <swiper-slide id="swiper-item-3"><img :src="swiper_mes.top_stories[2].image" alt="">
-                    <span class="swiper-title">{{swiper_mes.top_stories[2].title}}</span>
-                </swiper-slide>
-                <swiper-slide id="swiper-item-4"><img :src="swiper_mes.top_stories[3].image" alt="">
-                    <span class="swiper-title">{{swiper_mes.top_stories[3].title}}</span>
-                </swiper-slide>
-                <swiper-slide id="swiper-item-5"><img :src="swiper_mes.top_stories[4].image" alt="">
-                    <span class="swiper-title">{{swiper_mes.top_stories[4].title}}</span>
+                <swiper-slide id="swiper-item" v-for="item in swiper_mes.top_stories" :key="item.id">
+                    <img :src="item.image" alt="">
+                    <span class="swiper-title">{{item.title}}</span>
                 </swiper-slide>
                 <div class="swiper-pagination swiper-pagination-white" slot="pagination"></div>
             </swiper>
@@ -38,7 +27,7 @@ export default {
         return{
             swiperOption:{
                 // notNextTick是一个组件自有属性，如果notNextTick设置为true，组件则不会通过NextTick来实例化swiper，也就意味着你可以在第一时间获取到swiper对象，假如你需要刚加载遍使用获取swiper对象来做什么事，那么这个属性一定要是true
-                notNextTick: true,
+                // notNextTick: true,
                 pagination: '.swiper-pagination',
                 paginationClickable: true,
                 autoplay:2850,
@@ -47,8 +36,8 @@ export default {
                 touchMoveStopPropagation : false,
                 loop:false,
                 // 要使用箭头函数，在swiper的事件函数内，this不指向当前vue实例，当然了也可以在data内先获取this来保存vue实例
-                onTap:() => {
-                    this.getTopStories()
+                onTap:(e) => {
+                    this.getTopStories(e)
                 }
             },
             depth:0,
@@ -62,9 +51,9 @@ export default {
     },
     computed:{
         // 如果你需要得到当前的swiper对象来做一些事情，你可以像下面这样定义一个方法属性来获取当前的swiper对象，同时notNextTick必须为true
-        swiper(){
-            return this.$refs.mySwiper.swiper
-        }
+        // swiper(){
+        //     return this.$refs.mySwiper.swiper
+        // }
     },
     components:{
         swiper,
@@ -82,25 +71,25 @@ export default {
                 }
             })
     },
-    mounted(){
+    activated(){
         window.addEventListener('scroll',this.watchScroll)
         // console.log('this is current swiper instance object',this.swiper)
+    },
+    deactivated(){
+        window.removeEventListener('scroll',this.watchScroll)
     },
     methods:{
         watchScroll(){
             let value,header_str
             this.scroll=document.body.scrollTop
-            // 这里保存滚动位置 用于路由跳转
-            sessionStorage.setItem('scrollTop',this.scroll)
-            // 设置透明度
             value=this.scroll/800
             if(value>=1){
                 return
             }
             this.header_obj.backgroundColor='rgba(0,0,0,'+value+')'
         },
-        getTopStories(){
-            console.log('111')
+        getTopStories(e){
+            console.log(e.previousIndex)
         }
     }
 }

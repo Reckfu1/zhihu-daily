@@ -17,6 +17,34 @@ Vue.config.productionTip = false
 
 Vue.prototype.$http=axios
 
+Vue.filter('time', function(value) {
+    value=value*1000
+    let date = new Date(value)
+    let m = date.getMonth() + 1
+    let d = date.getDate()
+    let h = date.getHours()
+    let i = date.getMinutes()
+    let s = date.getSeconds()
+    if (m < 10) {
+        m = '0' + m
+    }
+    if (d < 10) {
+        d = '0' + d
+    }
+    if (h < 10) {
+        h = '0' + h
+    }
+    if (i < 10) {
+        i = '0' + i
+    }
+    if (s < 10) {
+        s = '0' + s
+    }
+    var t =m+'-'+d+' '+h+':'+i+':'+s
+    return t
+})
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import content from '../views/content'
 import index from '../views/index'
+import comment from '../views/comment'
 
 Vue.use(Router)
 
@@ -17,6 +18,11 @@ export default new Router({
       name:'content',
       path: '/stories/latest/:id',
       component:content
+    },
+    {
+      name:'comment',
+      path:'/stories/latest/:id/comments',
+      component:comment
     }
   ],
   scrollBehavior(to,from,savedPosition){
@@ -30,7 +36,7 @@ export default new Router({
     }
 
     if(to.path==='/'){
-      position.y=+sessionStorage.getItem('scrollTop')||0
+      position.y=+sessionStorage.getItem('scrollTop')
     }
 
     return position

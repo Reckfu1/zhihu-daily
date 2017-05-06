@@ -1,50 +1,122 @@
 <template>
-<div id="content">
-    <div class="detail" v-html="content_data.body"></div>
-    <mu-circular-progress :size="45" color="black" :strokeWidth="4" v-show="c_waiting" class="wait" />
-</div>
+    <div id="content" v-show="c_waiting" class="animated fadeIn">
+        <div class="content_head">
+            <img :src="content_data.image" alt="">
+        </div>
+        <div v-html="dataBody"></div>
+        <div class="content-bottom">
+            <mu-paper>
+                <mu-bottom-nav :value="bottomNav" @change="handleChange">
+                    <mu-bottom-nav-item value="arrowback" icon="arrow_back" />
+                    <mu-bottom-nav-item value="thumbup" icon="thumb_up" />
+                    <mu-bottom-nav-item value="chat" icon="chat" />
+                </mu-bottom-nav>
+            </mu-paper>
+            <span class="thumb-up">{{extra.popularity}}</span>
+            <span class="chat">{{extra.short_comments}}</span>
+        </div>
+    </div>
 </template>
 
-
 <script>
-
+import router from '../router'
 export default{
 
     data(){
         return {
             content_data:{},
-            c_waiting:true
+            c_waiting:false,
+            bottomNav:'',
+            extra:{},
+            shortComments:[],
+            _id:Number,
+            dataBody:''
         }
     },
-    created(){
-        this.c_waiting=true
+    activated(){
+        this.c_waiting=false
         let id=this.$route.params.id
+        this._id=id
+
         this.$http.get('/api/4/news/'+id)
             .then((res) => {
                 this.content_data=res.data
-                this.c_waiting=false
+                this.dataBody=res.data.body.replace('<div class=\"headline\">\n\n<div class=\"img-place-holder\"></div>\n\n\n\n</div>',"")
+                // console.log(res.data.body[35],res.data.body[106])
             })
             .catch((res) => {
                 if(res instanceof Error){
                     console.log('Error',res.message)
                 }
             })
-        
+
+        this.$http.get('/api/4/story-extra/'+id)
+            .then((res) => {
+                this.extra=res.data
+                this.c_waiting=true
+            })
+            .catch((res) => {
+                if(res instanceof Error){
+                    console.log('Error',res.message)
+                }
+            })
+    },
+    methods:{
+        handleChange(val){
+            this.bottomNav=val
+            switch(this.bottomNav){
+                case 'arrowback':
+                    router.push({name:'index'})
+                    this.bottomNav=''
+                    break
+                case 'thumbup':
+                    this.bottomNav=''
+                    break
+                case 'chat':
+                    this.bottomNav=''
+                    router.push({name:'comment'},{params:{id:this._id}})
+                    break
+            }
+        }
     }
 }
-
 </script>
 
 
 <style lang="css" scoped>
 @import '../assets/css/news_qa.auto.css';
-/*loading*/
-.wait{
-    position: absolute !important;
-    top:0;
-    left: 0;
-    right:0;
+#content{
+    position: relative;
+}
+.content-bottom{
+    position: fixed;
     bottom:0;
-    margin:auto;
+    height: 35px;
+    width:100%;
+}
+.thumb-up,.chat{
+    display: inline-block;
+    position: absolute;
+    height: 15px;
+    width:15px;
+    color:#000;
+    font-size:10px;
+}
+.thumb-up{
+    top:0;
+    left: 53%;
+}
+.chat{
+    top: 0;
+    right:8%;
+}
+.content_head{
+    height: 200px;
+}
+.content_head img{
+    position: relative;
+    width:100%;
+    margin-top:-40px;
+    z-index: -1;
 }
 </style>
