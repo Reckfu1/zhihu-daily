@@ -1,7 +1,7 @@
 <template>
     <div id="header" v-show="h_show">
         <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change" :style="header_obj">
-            <mu-icon-button icon='menu' slot="left" class="menu-btn" />
+            <mu-icon-button icon='menu' slot="left" class="menu-btn" @click="toggle(true)" />
         </mu-appbar>
         <div id="swiper-box">
             <swiper :options="swiperOption" v-if="swiper_mes.top_stories" id="swiper" ref="mySwiper">
@@ -14,11 +14,22 @@
             <div class="shade-top"></div>
             <div class="shade-bottom"></div>
         </div>
+        <mu-drawer :open="open" :docked="docked" width="160px" @close="toggle()">
+            <mu-list>
+                <mu-list-item title="知乎日报" titleClass="head-title"></mu-list-item>
+                <mu-list-item :title="item.name" titleClass="themes-title" v-for="item in themesData" :key="item.id" @click="goToThemesList(item.id)">
+                    <mu-icon slot="right" value="chevron_right"/>
+                </mu-list-item>
+            </mu-list>
+        </mu-drawer>
+        <div style="position:fixed;z-index:3;left:0;right:0;top:0;bottom:0;background-color:#000;opacity:.4" v-show="shadeShow" @click="toggle"></div>
     </div>
 </template>
 
-<script>
 
+
+<script>
+import router from '../router'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 export default {
@@ -26,8 +37,6 @@ export default {
     data(){
         return{
             swiperOption:{
-                // notNextTick是一个组件自有属性，如果notNextTick设置为true，组件则不会通过NextTick来实例化swiper，也就意味着你可以在第一时间获取到swiper对象，假如你需要刚加载遍使用获取swiper对象来做什么事，那么这个属性一定要是true
-                // notNextTick: true,
                 pagination: '.swiper-pagination',
                 paginationClickable: true,
                 autoplay:2850,
@@ -46,14 +55,12 @@ export default {
             header_obj:{
                 backgroundColor:'rgba(0,0,0,0)'
             },
-            h_show:false
+            h_show:false,
+            open:false,
+            docked:true,
+            shadeShow:false,
+            themesData:[]
         }
-    },
-    computed:{
-        // 如果你需要得到当前的swiper对象来做一些事情，你可以像下面这样定义一个方法属性来获取当前的swiper对象，同时notNextTick必须为true
-        // swiper(){
-        //     return this.$refs.mySwiper.swiper
-        // }
     },
     components:{
         swiper,
@@ -70,10 +77,18 @@ export default {
                     console.log('Error',res.message)
                 }
             })
+        this.$http.get('/api/4/themes')
+            .then((res) => {
+                this.themesData=res.data.others
+            })
+            .catch((res) => {
+                if(res instanceof Error){
+                    console.log('Error',res.message)
+                }
+            })
     },
     activated(){
         window.addEventListener('scroll',this.watchScroll)
-        // console.log('this is current swiper instance object',this.swiper)
     },
     deactivated(){
         window.removeEventListener('scroll',this.watchScroll)
@@ -89,7 +104,15 @@ export default {
             this.header_obj.backgroundColor='rgba(0,0,0,'+value+')'
         },
         getTopStories(e){
-            console.log(e.previousIndex)
+            let top_stories_id=this.swiper_mes.top_stories[e.activeIndex].id
+            router.push({name:'content',params:{id:top_stories_id}})
+        },
+        toggle(){
+            this.open=!this.open
+            this.shadeShow=!this.shadeShow    
+        },
+        goToThemesList(themesId){
+            router.push({name:'themesList',params:{id:themesId}})
         }
     }
 }
@@ -157,5 +180,15 @@ export default {
 }
 #swiper-box{
     position: relative;
+}
+.themes-title{
+    font-size: 14px !important;
+}
+.mu-drawer{
+    overflow: auto;
+}
+.head-title{
+    font-size: 20px !important;
+    font-weight: bold;
 }
 </style>

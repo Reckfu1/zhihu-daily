@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import content from '../views/content'
 import index from '../views/index'
 import comment from '../views/comment'
+import themesList from '../views/themesList'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
       name:'comment',
       path:'/stories/latest/:id/comments',
       component:comment
+    },
+    {
+      name:'themesList',
+      path:'/themes/:id',
+      component:themesList
     }
   ],
   scrollBehavior(to,from,savedPosition){

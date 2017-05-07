@@ -11,7 +11,6 @@ import header from '../components/header'
 import news from '../components/news/news'
 
 export default {
-
     components: {
         'v-header': header,
         news

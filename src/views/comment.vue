@@ -39,7 +39,7 @@ export default{
             router.push({name:'content'})
         },
         handleScroll(){
-            if(this.$refs.comment.offsetHeight+document.body.scrollTop == document.body.scrollHeight){
+            if(this.$refs.comment.offsetHeight+document.body.scrollTop >= document.body.scrollHeight){
                 this.commentLoading=true
                 let lastId,arr
                 lastId=this.shortCommentsData[this.shortCommentsData.length-1].id

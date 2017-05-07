@@ -1,6 +1,8 @@
 <template>
     <div id="content" v-show="c_waiting" class="animated fadeIn">
         <div class="content_head">
+            <span class="content_title">{{content_data.title}}</span>
+            <span class="content_img_source">图片:&nbsp;&nbsp;{{content_data.image_source}}</span>
             <img :src="content_data.image" alt="">
         </div>
         <div v-html="dataBody"></div>
@@ -15,6 +17,7 @@
             <span class="thumb-up">{{extra.popularity}}</span>
             <span class="chat">{{extra.short_comments}}</span>
         </div>
+        <div class="shade"></div>
     </div>
 </template>
 
@@ -42,7 +45,6 @@ export default{
             .then((res) => {
                 this.content_data=res.data
                 this.dataBody=res.data.body.replace('<div class=\"headline\">\n\n<div class=\"img-place-holder\"></div>\n\n\n\n</div>',"")
-                // console.log(res.data.body[35],res.data.body[106])
             })
             .catch((res) => {
                 if(res instanceof Error){
@@ -118,5 +120,32 @@ export default{
     width:100%;
     margin-top:-40px;
     z-index: -1;
+}
+.content_title,.content_img_source{
+    display:block;
+    color:#fff;
+    position: absolute;
+}
+.content_title{
+    font-size: 18px;
+    font-weight: bold;
+    width:80%;
+    margin-left: 12%;
+    margin-top: 125px;
+}
+.content_img_source{
+    font-size: 10px;
+    width: 100%;
+    text-align: right;
+    margin-top:180px;
+    padding-right: 10px;
+}
+
+.shade{
+    height: 200px;
+    width: 100%;
+    position: absolute;
+    top:0;
+    background-color: rgba(7,16,27,0.1);
 }
 </style>
