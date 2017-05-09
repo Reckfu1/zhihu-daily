@@ -4,6 +4,7 @@ import content from '../views/content'
 import index from '../views/index'
 import comment from '../views/comment'
 import themesList from '../views/themesList'
+// import themeContent from '../views/themeContent'
 
 Vue.use(Router)
 
@@ -17,12 +18,12 @@ export default new Router({
     },
     {
       name:'content',
-      path: '/stories/latest/:id',
+      path: '/stories/:id',
       component:content
     },
     {
       name:'comment',
-      path:'/stories/latest/:id/comments',
+      path:'/stories/:id/comments',
       component:comment
     },
     {
@@ -30,6 +31,11 @@ export default new Router({
       path:'/themes/:id',
       component:themesList
     }
+    // {
+    //   name:'themeContent',
+    //   path:'/themes/:id/content/:theme_content_id',
+    //   component:themeContent
+    // }
   ],
   scrollBehavior(to,from,savedPosition){
     if(savedPosition){

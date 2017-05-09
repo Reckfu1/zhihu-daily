@@ -26,8 +26,8 @@
 
 
 <script>
-import {getMaxDays} from './func.js'
-import router from '../../router'
+import {getMaxDays} from '../func.js'
+import router from '../router'
 export default {
 
     data() {
@@ -51,6 +51,8 @@ export default {
             temp_month = month
             temp_day = day
             str = '' + year + month + day
+            this.n_show=false
+
             if (month < 10) {
                 month = '0' + month
             }

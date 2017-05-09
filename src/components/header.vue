@@ -1,8 +1,12 @@
 <template>
     <div id="header" v-show="h_show">
-        <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change" :style="header_obj">
-            <mu-icon-button icon='menu' slot="left" class="menu-btn" @click="toggle(true)" />
-        </mu-appbar>
+<!--         <mu-appbar title="今日热闻" :zDepth="depth" class="title" titleClass="change" :style="header_obj">
+            <mu-icon-button icon='menu' slot="left" class="menu-btn" @click="toggle" />
+        </mu-appbar> -->
+        <div class="title-box" :style="header_obj">
+            <mu-icon value="menu" :size="28" color="white" class="menu-btn" @click="toggle"/>
+            <span class="title">今日热闻</span>
+        </div>
         <div id="swiper-box">
             <swiper :options="swiperOption" v-if="swiper_mes.top_stories" id="swiper" ref="mySwiper">
                 <swiper-slide id="swiper-item" v-for="item in swiper_mes.top_stories" :key="item.id">
@@ -22,7 +26,7 @@
                 </mu-list-item>
             </mu-list>
         </mu-drawer>
-        <div style="position:fixed;z-index:3;left:0;right:0;top:0;bottom:0;background-color:#000;opacity:.4" v-show="shadeShow" @click="toggle"></div>
+        <div style="position:fixed;z-index:3;left:0;right:0;top:0;bottom:0;background-color:#000;opacity:0.3" v-show="shadeShow" @click="toggle"></div>
     </div>
 </template>
 
@@ -67,6 +71,7 @@ export default {
         swiperSlide
     },
     created(){
+        this.h_show=false
         this.$http.get('/api/4/news/latest')
             .then((res) => {
                 this.swiper_mes=res.data
@@ -124,7 +129,7 @@ export default {
 #header{
     /*position: relative;*/
 }
-.title{
+/*.title{
     text-align: center !important;
     height: 38px !important;
     color:#fff !important;
@@ -139,7 +144,29 @@ export default {
 }
 .menu-btn{
     position: absolute;
-    left:-2px;
+    left:-20%;
+}*/
+.title-box{
+    height: 38px;
+    width: 100%;
+    position: fixed;
+    z-index: 3;
+}
+.title{
+    display: block;
+    margin:0 auto;
+    height: 38px;
+    width:200px;
+    line-height: 38px;
+    text-align: center;
+    color:#fff;
+    font-weight: bold;
+    font-size: 18px;
+}
+.menu-btn{
+    position: absolute;
+    left:2%;
+    top:10%;
 }
 #swiper{
     height: 200px;

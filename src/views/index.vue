@@ -8,7 +8,7 @@
 
 <script>
 import header from '../components/header'
-import news from '../components/news/news'
+import news from '../components/news'
 
 export default {
     components: {

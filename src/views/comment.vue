@@ -1,5 +1,5 @@
 <template>
-    <div id="comment" class="animated fadeIn" ref="comment">
+    <div id="comment" class="animated fadeIn" ref="comment" v-show="commentShow">
         <div class="comment-title">
             <span>{{extraData.short_comments}}条点评</span>
             <div class="comment-back" @click="backToContent">
@@ -31,7 +31,8 @@ export default{
             extraData:{},
             shortCommentsData:[],
             commentLoading:false,
-            id:Number
+            id:Number,
+            commentShow:false
         }
     },
     methods:{
@@ -58,6 +59,7 @@ export default{
         }
     },
     activated(){
+        this.commentShow=false
         this.id=this.$route.params.id
         window.addEventListener('scroll',this.handleScroll)
         this.$http.get('/api/4/story-extra/'+this.id)
@@ -72,6 +74,7 @@ export default{
         this.$http.get('/api/4/story/'+this.id+'/short-comments')
             .then((res) => {
                 this.shortCommentsData=res.data.comments
+                this.commentShow=true
             })
             .catch((res) => {
                 if(res instanceof Error){

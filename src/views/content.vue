@@ -1,6 +1,6 @@
 <template>
     <div id="content" v-show="c_waiting" class="animated fadeIn">
-        <div class="content_head">
+        <div class="content_head" v-show="content_data.image">
             <span class="content_title">{{content_data.title}}</span>
             <span class="content_img_source">图片:&nbsp;&nbsp;{{content_data.image_source}}</span>
             <img :src="content_data.image" alt="">
@@ -17,7 +17,7 @@
             <span class="thumb-up">{{extra.popularity}}</span>
             <span class="chat">{{extra.short_comments}}</span>
         </div>
-        <div class="shade"></div>
+        <div class="shade" v-show="content_data.image"></div>
     </div>
 </template>
 
