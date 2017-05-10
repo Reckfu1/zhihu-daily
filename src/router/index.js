@@ -31,11 +31,6 @@ export default new Router({
       path:'/themes/:id',
       component:themesList
     }
-    // {
-    //   name:'themeContent',
-    //   path:'/themes/:id/content/:theme_content_id',
-    //   component:themeContent
-    // }
   ],
   scrollBehavior(to,from,savedPosition){
     if(savedPosition){
@@ -52,5 +47,6 @@ export default new Router({
     }
 
     return position
-  }
+  },
+  base:'zhihu-daily/'
 })
