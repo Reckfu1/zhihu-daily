@@ -25,6 +25,7 @@
 
 <script>
 import router from '../router'
+import {fetchStoryExtra,fetchShortComments,fetchBeforeComments} from '../api'
 export default{
     data() {
         return {
@@ -44,17 +45,13 @@ export default{
                 this.commentLoading=true
                 let lastId,arr
                 lastId=this.shortCommentsData[this.shortCommentsData.length-1].id
-                this.$http.get('/api/4/story/'+this.id+'/short-comments/before/'+lastId)
-                    .then((res) => {
-                        arr=this.shortCommentsData.concat(res.data.comments)
-                        this.shortCommentsData=arr
-                        this.commentLoading=false
-                    })
-                    .catch((res) => {
-                        if(res instanceof Error){
-                            console.log('Error',res.message)
-                        }
-                    })
+
+                fetchBeforeComments(this.id,lastId).then((res) => {
+                    arr=this.shortCommentsData.concat(res.data.comments)
+                    this.shortCommentsData=arr
+                    this.commentLoading=false
+                })
+
             }
         }
     },
@@ -62,25 +59,15 @@ export default{
         this.commentShow=false
         this.id=this.$route.params.id
         window.addEventListener('scroll',this.handleScroll)
-        this.$http.get('/api/4/story-extra/'+this.id)
-            .then((res) => {
-                this.extraData=res.data
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
-        this.$http.get('/api/4/story/'+this.id+'/short-comments')
-            .then((res) => {
-                this.shortCommentsData=res.data.comments
-                this.commentShow=true
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
+
+        fetchStoryExtra(this.id).then((res) => {
+            this.extraData=res.data
+        })
+
+        fetchShortComments(this.id).then((res) => {
+            this.shortCommentsData=res.data.comments
+            this.commentShow=true
+        })
     },
     deactivated(){
         window.removeEventListener('scroll',this.handleScroll)

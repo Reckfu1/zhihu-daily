@@ -19,6 +19,7 @@
 
 <script>
 import router from '../router'
+import {fetchThemesList} from '../api'
 export default{
     data(){
         return {
@@ -28,17 +29,12 @@ export default{
     },
     activated(){
         let themeId=this.$route.params.id
-        this.themesListShow=false
-        this.$http.get('/api/4/theme/'+themeId)
-            .then((res) => {
-                this.themesListData=res.data
-                this.themesListShow=true
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
+        this.themesListShow=false 
+        
+        fetchThemesList(themeId).then((res) => {
+            this.themesListData=res.data
+            this.themesListShow=true
+        })
     },
     methods:{
         backToHome(){

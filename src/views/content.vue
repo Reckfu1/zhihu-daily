@@ -23,6 +23,7 @@
 
 <script>
 import router from '../router'
+import {fetchNewsContent,fetchStoryExtra} from '../api'
 export default{
 
     data(){
@@ -40,28 +41,16 @@ export default{
         this.c_waiting=false
         let id=this.$route.params.id
         this._id=id
+        
+        fetchNewsContent(id).then((res) => {
+            this.content_data=res.data
+            this.dataBody=res.data.body.replace('<div class=\"headline\">\n\n<div class=\"img-place-holder\"></div>\n\n\n\n</div>',"")
+        })
 
-        this.$http.get('/api/4/news/'+id)
-            .then((res) => {
-                this.content_data=res.data
-                this.dataBody=res.data.body.replace('<div class=\"headline\">\n\n<div class=\"img-place-holder\"></div>\n\n\n\n</div>',"")
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
-
-        this.$http.get('/api/4/story-extra/'+id)
-            .then((res) => {
-                this.extra=res.data
-                this.c_waiting=true
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
+        fetchStoryExtra(id).then((res) => {
+            this.extra=res.data
+            this.c_waiting=true
+        })
     },
     methods:{
         handleChange(val){

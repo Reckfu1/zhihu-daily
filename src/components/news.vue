@@ -28,6 +28,7 @@
 <script>
 import {getMaxDays} from '../func.js'
 import router from '../router'
+import {fetchLastestNews,fetchBeforeNews} from '../api'
 export default {
 
     data() {
@@ -64,26 +65,15 @@ export default {
             this.load_str=str
             this.load_month=date.getMonth()+1
             // 获取最新消息，即当天日期
-            this.$http.get('/api/4/news/latest')
-                .then((res) => {
-                    this.news = res.data.stories
-                })
-                .catch((res) => {
-                    if (res instanceof Error) {
-                        console.log('Error', res.message)
-                    }
-                })
+            fetchLastestNews().then((res) => {
+                this.news = res.data.stories
+            })
 
             // 获取昨天的消息
-            this.$http.get('/api/4/news/before/' + str)
-                .then((res) => {
-                    this.yesterday_news = res.data.stories
-                })
-                .catch((res) => {
-                    if (res instanceof Error) {
-                        console.log('Error', res.message)
-                    }
-                })
+            fetchBeforeNews(str).then((res) => {
+                this.yesterday_news = res.data.stories
+            })
+
             // 获取前天的消息，先判断前天是否回到了上个月
             // 如果为true，月份减一并获取上个月最大天数，重新构造url
             // 如果为false，只需天数减一
@@ -104,17 +94,12 @@ export default {
             } else {
                 str_2 = str - 1
             }
+            
             // 获取前天的消息
-            this.$http.get('/api/4/news/before/' + str_2)
-                .then((res) => {
-                    this.before_news = res.data.stories
-                    this.n_show=true
-                })
-                .catch((res) => {
-                    if (res instanceof Error) {
-                        console.log('Error', res.message)
-                    }
-                })
+            fetchBeforeNews(str_2).then((res) => {
+                this.before_news = res.data.stories
+                this.n_show=true
+            })
         },
         computed: {
             getYesterday() {

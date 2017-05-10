@@ -8,8 +8,8 @@
             <span class="title">今日热闻</span>
         </div>
         <div id="swiper-box">
-            <swiper :options="swiperOption" v-if="swiper_mes.top_stories" id="swiper" ref="mySwiper">
-                <swiper-slide id="swiper-item" v-for="item in swiper_mes.top_stories" :key="item.id">
+            <swiper :options="swiperOption" v-if="swiper_mes" id="swiper" ref="mySwiper">
+                <swiper-slide id="swiper-item" v-for="item in swiper_mes" :key="item.id">
                     <img :src="item.image" alt="">
                     <span class="swiper-title">{{item.title}}</span>
                 </swiper-slide>
@@ -35,7 +35,7 @@
 <script>
 import router from '../router'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
-
+import {fetchLastestNews,fetchThemes} from '../api'
 export default {
 
     data(){
@@ -55,7 +55,7 @@ export default {
             },
             depth:0,
             scroll:0,
-            swiper_mes:{},
+            swiper_mes:[],
             header_obj:{
                 backgroundColor:'rgba(0,0,0,0)'
             },
@@ -72,25 +72,15 @@ export default {
     },
     created(){
         this.h_show=false
-        this.$http.get('/api/4/news/latest')
-            .then((res) => {
-                this.swiper_mes=res.data
-                this.h_show=true
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
-        this.$http.get('/api/4/themes')
-            .then((res) => {
-                this.themesData=res.data.others
-            })
-            .catch((res) => {
-                if(res instanceof Error){
-                    console.log('Error',res.message)
-                }
-            })
+        
+        fetchLastestNews().then((res) => {
+            this.swiper_mes=res.data.top_stories
+            this.h_show=true
+        })
+
+        fetchThemes().then((res) => {
+            this.themesData=res.data.others
+        })
     },
     activated(){
         window.addEventListener('scroll',this.watchScroll)
@@ -109,7 +99,7 @@ export default {
             this.header_obj.backgroundColor='rgba(0,0,0,'+value+')'
         },
         getTopStories(e){
-            let top_stories_id=this.swiper_mes.top_stories[e.activeIndex].id
+            let top_stories_id=this.swiper_mes[e.activeIndex].id
             router.push({name:'content',params:{id:top_stories_id}})
         },
         toggle(){
