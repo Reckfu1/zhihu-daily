@@ -4,7 +4,6 @@ import content from '../views/content'
 import index from '../views/index'
 import comment from '../views/comment'
 import themesList from '../views/themesList'
-// import themeContent from '../views/themeContent'
 
 Vue.use(Router)
 
