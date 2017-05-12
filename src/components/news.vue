@@ -163,17 +163,12 @@ export default {
                     this.load_month=foo
                 }
 
-                this.$http.get('/api/4/news/before/' + (this.load_str-1+''))
-                    .then((res) => {
-                        for(let i=0;i<res.data.stories.length;i++){
-                            this.before_news.push(res.data.stories[i])
-                        }
-                    })
-                    .catch((res) => {
-                        if(res instanceof Error){
-                            console.log('Error',res.message)
-                        }
-                    })
+                fetchBeforeNews((this.load_str-1+'')).then((res) => {
+                    for(let i=0;i<res.data.stories.length;i++){
+                        this.before_news.push(res.data.stories[i])
+                    }
+                })
+
             },
             getNewsContent(id){
                 router.push({name:'content',params:{id:id} })
