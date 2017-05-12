@@ -15,8 +15,6 @@ Vue.use(VueAwesomeSwiper)
 
 Vue.config.productionTip = false
 
-Vue.prototype.$http=axios
-
 Vue.filter('time', function(value) {
     value=value*1000
     let date = new Date(value)
