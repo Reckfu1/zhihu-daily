@@ -24,14 +24,15 @@ export default{
     data(){
         return {
             themesListData:{},
-            themesListShow:false
+            themesListShow:false,
+            themeId:''
         }
     },
     activated(){
-        let themeId=this.$route.params.id
+        this.themeId=this.$route.params.id
         this.themesListShow=false 
         
-        fetchThemesList(themeId).then((res) => {
+        fetchThemesList(this.themeId).then((res) => {
             this.themesListData=res.data
             this.themesListShow=true
         })
@@ -41,7 +42,7 @@ export default{
             router.push({name:'index'})
         },
         getItemContent(id){
-            router.push({name:'content',params:{id:id}})
+            router.push({name:'content',params:{id:id,frompath:'theme_'+this.themeId}})
         }
     }
 }

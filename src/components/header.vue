@@ -100,7 +100,7 @@ export default {
         },
         getTopStories(e){
             let top_stories_id=this.swiper_mes[e.activeIndex].id
-            router.push({name:'content',params:{id:top_stories_id}})
+            router.push({name:'content',params:{id:top_stories_id,frompath:'top_news'}})
         },
         toggle(){
             this.open=!this.open

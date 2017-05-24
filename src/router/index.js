@@ -17,7 +17,7 @@ export default new Router({
     },
     {
       name:'content',
-      path: '/stories/:id',
+      path: '/stories/:frompath/:id',
       component:content
     },
     {

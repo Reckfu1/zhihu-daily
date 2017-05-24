@@ -34,13 +34,17 @@ export default{
             extra:{},
             shortComments:[],
             _id:Number,
-            dataBody:''
+            dataBody:'',
+            fromPath:''
         }
     },
     activated(){
         this.c_waiting=false
         let id=this.$route.params.id
         this._id=id
+
+        let path=this.$route.params.frompath
+        this.fromPath=path
         
         fetchNewsContent(id).then((res) => {
             this.content_data=res.data
@@ -57,7 +61,12 @@ export default{
             this.bottomNav=val
             switch(this.bottomNav){
                 case 'arrowback':
-                    router.push({name:'index'})
+                    if(this.fromPath.indexOf('themenews')){
+                        router.go(-1)
+                    }
+                    else{
+                        router.push({name:'index'})
+                    }
                     this.bottomNav=''
                     break
                 case 'thumbup':

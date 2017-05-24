@@ -171,7 +171,7 @@ export default {
 
             },
             getNewsContent(id){
-                router.push({name:'content',params:{id:id} })
+                router.push({name:'content',params:{id:id,frompath:'daily_news'} })
             }
         }
 
