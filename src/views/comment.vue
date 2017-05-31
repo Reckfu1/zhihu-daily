@@ -38,7 +38,7 @@ export default{
     },
     methods:{
         backToContent(){
-            router.push({name:'content'})
+            router.go(-1)
         },
         handleScroll(){
             if(this.$refs.comment.offsetHeight+document.body.scrollTop >= document.body.scrollHeight){

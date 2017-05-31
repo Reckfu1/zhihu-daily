@@ -45,6 +45,8 @@ export default{
 
         let path=this.$route.params.frompath
         this.fromPath=path
+
+        console.log(this.fromPath)
         
         fetchNewsContent(id).then((res) => {
             this.content_data=res.data
